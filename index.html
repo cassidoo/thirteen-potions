@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Escape the Castle!</title>
+		<script src="./phaser.min.js"></script>
+		<style type="text/css">
+			html,
+			body,
+			#game-container {
+				margin: 0;
+				padding: 0;
+			}
+
+			#game-container {
+				min-width: 100vw;
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		</style>
+		<script type="text/javascript">
+			var config = {
+				type: Phaser.AUTO,
+				width: 800,
+				height: 600,
+				scene: {
+					preload: preload,
+					create: create,
+					update: update,
+				},
+			};
+
+			var game = new Phaser.Game(config);
+
+			function preload() {
+				// Runs once, loads up assets like images and audio
+			}
+
+			function create() {
+				// Runs once, after all assets in preload are loaded
+			}
+
+			function update() {
+				// Runs once per frame for the duration of the scene
+			}
+		</script>
+	</head>
+	<body>
+		<div id="game-container"></div>
+	</body>
+</html>
