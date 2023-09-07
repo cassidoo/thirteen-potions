@@ -24,8 +24,11 @@
 		<script type="text/javascript">
 			var config = {
 				type: Phaser.AUTO,
-				width: 800,
-				height: 600,
+				width: 240,
+				height: 240,
+				zoom: 3,
+				parent: "game-container",
+				pixelArt: true,
 				scene: {
 					preload: preload,
 					create: create,
@@ -37,10 +40,19 @@
 
 			function preload() {
 				// Runs once, loads up assets like images and audio
+				this.load.image("tiles", "./tilemap_packed.png");
+				this.load.tilemapTiledJSON("map", "./map.json");
 			}
 
 			function create() {
 				// Runs once, after all assets in preload are loaded
+
+				const map = this.make.tilemap({ key: "map" });
+				const tileset = map.addTilesetImage("thirteen-potions", "tiles");
+
+				// Parameters: layer name (or index) from Tiled, tileset, x, y
+				const groundLayer = map.createLayer("Ground", tileset, 0, 0);
+				const wallLayer = map.createLayer("Walls", tileset, 0, 0);
 			}
 
 			function update() {
@@ -50,5 +62,6 @@
 	</head>
 	<body>
 		<div id="game-container"></div>
+		<!-- <img src="./tilemap_packed.png" alt="tilemap" /> -->
 	</body>
 </html>
