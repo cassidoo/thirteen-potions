@@ -22,11 +22,10 @@
 			}
 		</style>
 		<script type="text/javascript">
-			var config = {
+			let config = {
 				type: Phaser.AUTO,
-				width: 240,
-				height: 240,
-				zoom: 3,
+				width: 400,
+				height: 300,
 				parent: "game-container",
 				pixelArt: true,
 				scene: {
@@ -34,29 +33,61 @@
 					create: create,
 					update: update,
 				},
+				physics: {
+					default: "arcade",
+					arcade: {
+						gravity: { y: 0 }, // Top down game, so no gravity
+					},
+				},
 			};
 
-			var game = new Phaser.Game(config);
+			let game = new Phaser.Game(config);
+			let controls;
 
+			// Runs once, loads up assets like images and audio
 			function preload() {
-				// Runs once, loads up assets like images and audio
 				this.load.image("tiles", "./tilemap_packed.png");
 				this.load.tilemapTiledJSON("map", "./map.json");
 			}
 
+			// Runs once, after all assets in preload are loaded
 			function create() {
-				// Runs once, after all assets in preload are loaded
-
 				const map = this.make.tilemap({ key: "map" });
 				const tileset = map.addTilesetImage("thirteen-potions", "tiles");
 
 				// Parameters: layer name (or index) from Tiled, tileset, x, y
 				const groundLayer = map.createLayer("Ground", tileset, 0, 0);
 				const wallLayer = map.createLayer("Walls", tileset, 0, 0);
+				wallLayer.setCollisionByProperty({ collides: true });
+				groundLayer.setCollisionByProperty({ collides: true });
+
+				// Phaser supports multiple cameras, but you can access the default camera like this:
+				let camera = this.cameras.main;
+
+				camera.width = 400;
+				camera.height = 300;
+				camera.scrollX = 320;
+				camera.scrollY = -75;
+				camera.zoom = 3;
+
+				// Set up the arrows to control the camera
+				const cursors = this.input.keyboard.createCursorKeys();
+				controls = new Phaser.Cameras.Controls.FixedKeyControl({
+					camera: camera,
+					left: cursors.left,
+					right: cursors.right,
+					up: cursors.up,
+					down: cursors.down,
+					speed: 0.5,
+				});
+
+				// Constrain the camera
+				camera.setBounds(0, 0, 720, 480);
 			}
 
-			function update() {
-				// Runs once per frame for the duration of the scene
+			// Runs once per frame for the duration of the scene
+			function update(time, delta) {
+				controls.update(delta);
 			}
 		</script>
 	</head>
