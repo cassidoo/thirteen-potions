@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Escape the Castle!</title>
+		<title>Thirteen Potions</title>
 		<script src="./phaser.min.js"></script>
 		<style type="text/css">
 			html,
@@ -11,6 +11,7 @@
 			#game-container {
 				margin: 0;
 				padding: 0;
+				background: #3b2731;
 			}
 
 			#game-container {
@@ -43,6 +44,7 @@
 
 			let game = new Phaser.Game(config);
 			let controls;
+			let player;
 
 			// Runs once, loads up assets like images and audio
 			function preload() {
@@ -50,7 +52,7 @@
 				this.load.tilemapTiledJSON("map", "./map.json");
 			}
 
-			// Runs once, after all assets in preload are loaded
+			// Runs once, after all assets in preload
 			function create() {
 				const map = this.make.tilemap({ key: "map" });
 				const tileset = map.addTilesetImage("thirteen-potions", "tiles");
@@ -59,7 +61,6 @@
 				const groundLayer = map.createLayer("Ground", tileset, 0, 0);
 				const wallLayer = map.createLayer("Walls", tileset, 0, 0);
 				wallLayer.setCollisionByProperty({ collides: true });
-				groundLayer.setCollisionByProperty({ collides: true });
 
 				// Phaser supports multiple cameras, but you can access the default camera like this:
 				let camera = this.cameras.main;
@@ -78,7 +79,7 @@
 					right: cursors.right,
 					up: cursors.up,
 					down: cursors.down,
-					speed: 0.5,
+					speed: 0.2,
 				});
 
 				// Constrain the camera
