@@ -23,12 +23,12 @@
  </tile>
  <tile id="4">
   <properties>
-   <property name="collides" value="false"/>
+   <property name="collides" value="true"/>
   </properties>
  </tile>
  <tile id="5">
   <properties>
-   <property name="collides" value="false"/>
+   <property name="collides" value="true"/>
   </properties>
  </tile>
  <tile id="6">
@@ -133,7 +133,7 @@
  </tile>
  <tile id="26">
   <properties>
-   <property name="collides" value="false"/>
+   <property name="collides" value="true"/>
   </properties>
  </tile>
  <tile id="27">
