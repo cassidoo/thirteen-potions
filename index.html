@@ -25,8 +25,8 @@
 		<script type="text/javascript">
 			let config = {
 				type: Phaser.AUTO,
-				width: 400,
-				height: 300,
+				width: 720,
+				height: 480,
 				parent: "game-container",
 				pixelArt: true,
 				scene: {
@@ -76,6 +76,7 @@
 				player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "knight");
 				this.physics.add.collider(player, wallLayer);
 				player.setBounce(0.2);
+				player.setCollideWorldBounds(true);
 
 				this.anims.create({
 					key: "right",
@@ -117,14 +118,10 @@
 					repeat: -1,
 				});
 
-				// Phaser supports multiple cameras, but you can access the default camera like this:
+				// Phaser default camera
 				let camera = this.cameras.main;
-
-				camera.width = 400;
-				camera.height = 300;
-				camera.scrollX = 320;
-				camera.scrollY = -75;
-				camera.zoom = 3;
+				camera.zoom = 4;
+				camera.setViewport(0, 0, 720, 480);
 				camera.setBounds(0, 0, 720, 480);
 				camera.startFollow(player);
 
@@ -170,10 +167,12 @@
 					player.anims.stop();
 
 					// If we were moving, pick and idle frame to use
-					if (prevVelocity.x < 0) player.setTexture("knight", 2);
-					else if (prevVelocity.x > 0) player.setTexture("knight", 0);
-					else if (prevVelocity.y < 0) player.setTexture("knight", 5);
-					else if (prevVelocity.y > 0) player.setTexture("knight", 0);
+					if (prevVelocity.x < 0) player.setTexture("knight", 2); // look left
+					else if (prevVelocity.x > 0)
+						player.setTexture("knight", 0); // look right
+					else if (prevVelocity.y < 0)
+						player.setTexture("knight", 4); // look up
+					else if (prevVelocity.y > 0) player.setTexture("knight", 0); // look down
 				}
 			}
 		</script>
