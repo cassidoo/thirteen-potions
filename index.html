@@ -50,8 +50,8 @@
 			// Runs once, loads up assets like images and audio
 			function preload() {
 				this.load.image("tiles", "./tilemap_packed.png");
-				this.load.tilemapTiledJSON("map", "./map.json");
-				this.load.spritesheet("knight", "./knight_packed.png", {
+				this.load.tilemapTiledJSON("map", "./mappy/map.json");
+				this.load.spritesheet("knight", "./knight/knight_packed.png", {
 					frameWidth: 16,
 					frameHeight: 16,
 				});
@@ -59,13 +59,24 @@
 
 			// Runs once, after all assets in preload
 			function create() {
-				const map = this.make.tilemap({ key: "map" });
+				const map = this.make.tilemap({
+					key: "map",
+					tileWidth: 16,
+					tileHeight: 16,
+				});
 				const tileset = map.addTilesetImage("thirteen-potions", "tiles");
 
 				// Parameters: layer name (or index) from Tiled, tileset, x, y
 				const groundLayer = map.createLayer("Ground", tileset, 0, 0);
 				const wallLayer = map.createLayer("Walls", tileset, 0, 0);
-				wallLayer.setCollisionByProperty({ collides: true });
+				wallLayer.setCollisionByExclusion([-1]);
+
+				// const debugGraphics = this.add.graphics().setAlpha(0.75);
+				// wallLayer.renderDebug(debugGraphics, {
+				// 	tileColor: null, // Color of non-colliding tiles
+				// 	collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+				// 	faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+				// });
 
 				// Adding player to the screen
 				const spawnPoint = map.findObject(
@@ -73,9 +84,11 @@
 					(obj) => obj.name === "Spawn"
 				);
 
-				player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "knight");
+				player = this.physics.add
+					.sprite(spawnPoint.x, spawnPoint.y, "knight")
+					.setInteractive(this.input.makePixelPerfect());
 				this.physics.add.collider(player, wallLayer);
-				player.setBounce(0.2);
+				// player.setBounce(0.5);
 				player.setCollideWorldBounds(true);
 
 				this.anims.create({
