@@ -4,6 +4,13 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Thirteen Potions</title>
+		<meta
+			name="description"
+			content="Get all the potions as fast as you can!"
+		/>
+		<!-- favicon -->
+		<link rel="icon" href="./knight/right.png" />
+
 		<script src="./phaser.min.js"></script>
 		<style type="text/css">
 			html,
@@ -70,6 +77,9 @@
 				const groundLayer = map.createLayer("Ground", tileset, 0, 0);
 				const wallLayer = map.createLayer("Walls", tileset, 0, 0);
 				wallLayer.setCollisionByExclusion([-1]);
+				// wallLayer.setCollisionByProperty({ collides: true });
+
+				// const potionLayer = map.createLayer("Things", tileset, 0, 0);
 
 				// const debugGraphics = this.add.graphics().setAlpha(0.75);
 				// wallLayer.renderDebug(debugGraphics, {
