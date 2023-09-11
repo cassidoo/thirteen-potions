@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="thirteen-potions" tilewidth="16" tileheight="16" tilecount="132" columns="12">
+ <editorsettings>
+  <export target="" format="tsx"/>
+ </editorsettings>
  <image source="../tilemap_packed.png" width="192" height="176"/>
  <tile id="0">
   <properties>
@@ -218,12 +221,12 @@
  </tile>
  <tile id="43">
   <properties>
-   <property name="collides" value="true"/>
+   <property name="collides" value="false"/>
   </properties>
  </tile>
  <tile id="44">
   <properties>
-   <property name="collides" value="true"/>
+   <property name="collides" value="false"/>
   </properties>
  </tile>
  <tile id="45">

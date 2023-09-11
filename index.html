@@ -22,8 +22,8 @@
 			}
 
 			#game-container {
-				min-width: 100vw;
-				min-height: 100vh;
+				width: 100vw;
+				height: 100vh;
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -58,11 +58,14 @@
 			let potions;
 			let potionScore = 0;
 
+			let text;
+			let time;
+
 			// Runs once, loads up assets like images and audio
 			function preload() {
 				this.load.image("tiles", "./tilemap_packed.png");
 				this.load.image("potion", "./potion.png");
-				this.load.tilemapTiledJSON("map", "./mappy/map.json");
+				this.load.tilemapTiledJSON("map", "./map/map.json");
 				this.load.spritesheet("knight", "./knight/knight_packed.png", {
 					frameWidth: 16,
 					frameHeight: 16,
@@ -87,7 +90,6 @@
 				// Adding potions
 				potions = this.physics.add.staticGroup();
 				PotionLayer.forEach((object) => {
-					console.log(object);
 					let obj = potions.create(object.x, object.y - 16, "potion");
 					obj.setScale(object.width / 16, object.height / 16);
 					obj.setOrigin(0);
@@ -103,9 +105,8 @@
 
 				player = this.physics.add
 					.sprite(spawnPoint.x, spawnPoint.y, "knight")
-					.setInteractive(this.input.makePixelPerfect());
+					.setInteractive(this.input.makePixelPerfect(0));
 				this.physics.add.collider(player, wallLayer);
-				// player.setBounce(0.5);
 				player.setCollideWorldBounds(true);
 
 				this.anims.create({
@@ -148,14 +149,36 @@
 					repeat: -1,
 				});
 
+				this.physics.add.overlap(player, potions, collectPotion, null, this);
+
 				// Phaser default camera
 				let camera = this.cameras.main;
 				camera.zoom = 4;
-				camera.setViewport(0, 0, 720, 480);
 				camera.setBounds(0, 0, 720, 480);
 				camera.startFollow(player);
 
 				cursors = this.input.keyboard.createCursorKeys();
+
+				text = this.add.text(270, 180, `Potions left: ${13 - potionScore}`, {
+					font: "10px",
+					fill: "#ffffff",
+					backgroundColor: "#3B2731",
+					padding: { x: 2, y: 2 },
+				});
+				text.setScrollFactor(0);
+				// text.setDepth(100);
+				// text = this.text = this.add
+				// 	.text(200, 230)
+				// 	.setText("Potions left: 13")
+				// 	.setScrollFactor(0);
+				// text.style({ backgroundColor: "#3B2731", color: "#ffffff" });
+			}
+
+			function collectPotion(player, potion) {
+				potion.destroy(potion.x, potion.y); // remove the tile
+				potionScore++;
+				text.setText(`Potions left: ${13 - potionScore}`);
+				return false;
 			}
 
 			// Runs once per frame for the duration of the scene
