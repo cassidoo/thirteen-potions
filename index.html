@@ -54,9 +54,14 @@
 			let cursors;
 			let player;
 
+			let PotionLayer;
+			let potions;
+			let potionScore = 0;
+
 			// Runs once, loads up assets like images and audio
 			function preload() {
 				this.load.image("tiles", "./tilemap_packed.png");
+				this.load.image("potion", "./potion.png");
 				this.load.tilemapTiledJSON("map", "./mappy/map.json");
 				this.load.spritesheet("knight", "./knight/knight_packed.png", {
 					frameWidth: 16,
@@ -77,16 +82,18 @@
 				const groundLayer = map.createLayer("Ground", tileset, 0, 0);
 				const wallLayer = map.createLayer("Walls", tileset, 0, 0);
 				wallLayer.setCollisionByExclusion([-1]);
-				// wallLayer.setCollisionByProperty({ collides: true });
+				PotionLayer = map.getObjectLayer("Things")["objects"].slice(1);
 
-				// const potionLayer = map.createLayer("Things", tileset, 0, 0);
-
-				// const debugGraphics = this.add.graphics().setAlpha(0.75);
-				// wallLayer.renderDebug(debugGraphics, {
-				// 	tileColor: null, // Color of non-colliding tiles
-				// 	collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-				// 	faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-				// });
+				// Adding potions
+				potions = this.physics.add.staticGroup();
+				PotionLayer.forEach((object) => {
+					console.log(object);
+					let obj = potions.create(object.x, object.y - 16, "potion");
+					obj.setScale(object.width / 16, object.height / 16);
+					obj.setOrigin(0);
+					obj.body.width = object.width;
+					obj.body.height = object.height;
+				});
 
 				// Adding player to the screen
 				const spawnPoint = map.findObject(
