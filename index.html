@@ -53,10 +53,14 @@
 			let controls;
 			let cursors;
 			let player;
+			let speed = 100;
 
 			let PotionLayer;
 			let potions;
 			let potionScore = 0;
+
+			let EnemyLayer;
+			let enemies;
 
 			let text;
 			let time;
@@ -65,6 +69,7 @@
 			function preload() {
 				this.load.image("tiles", "./tilemap_packed.png");
 				this.load.image("potion", "./potion.png");
+				this.load.image("enemy", "./enemy.png");
 				this.load.tilemapTiledJSON("map", "./map/map.json");
 				this.load.spritesheet("knight", "./knight/knight_packed.png", {
 					frameWidth: 16,
@@ -86,11 +91,22 @@
 				const wallLayer = map.createLayer("Walls", tileset, 0, 0);
 				wallLayer.setCollisionByExclusion([-1]);
 				PotionLayer = map.getObjectLayer("Things")["objects"].slice(1);
+				EnemyLayer = map.getObjectLayer("Enemies")["objects"];
 
 				// Adding potions
 				potions = this.physics.add.staticGroup();
 				PotionLayer.forEach((object) => {
 					let obj = potions.create(object.x, object.y - 16, "potion");
+					obj.setScale(object.width / 16, object.height / 16);
+					obj.setOrigin(0);
+					obj.body.width = object.width;
+					obj.body.height = object.height;
+				});
+
+				// Adding enemies
+				enemies = this.physics.add.staticGroup();
+				EnemyLayer.forEach((object) => {
+					let obj = enemies.create(object.x, object.y - 16, "enemy");
 					obj.setScale(object.width / 16, object.height / 16);
 					obj.setOrigin(0);
 					obj.body.width = object.width;
@@ -150,6 +166,7 @@
 				});
 
 				this.physics.add.overlap(player, potions, collectPotion, null, this);
+				this.physics.add.overlap(player, enemies, zappy, null, this);
 
 				// Phaser default camera
 				let camera = this.cameras.main;
@@ -160,18 +177,12 @@
 				cursors = this.input.keyboard.createCursorKeys();
 
 				text = this.add.text(270, 180, `Potions left: ${13 - potionScore}`, {
-					font: "10px",
+					font: "8px",
 					fill: "#ffffff",
 					backgroundColor: "#3B2731",
 					padding: { x: 2, y: 2 },
 				});
 				text.setScrollFactor(0);
-				// text.setDepth(100);
-				// text = this.text = this.add
-				// 	.text(200, 230)
-				// 	.setText("Potions left: 13")
-				// 	.setScrollFactor(0);
-				// text.style({ backgroundColor: "#3B2731", color: "#ffffff" });
 			}
 
 			function collectPotion(player, potion) {
@@ -181,24 +192,36 @@
 				return false;
 			}
 
+			function zappy() {
+				speed = 50;
+				player.alpha = 0.6;
+				player.tint = 0xff0000;
+				setTimeout(() => {
+					speed = 100;
+					player.alpha = 1;
+					player.clearTint();
+				}, 2000);
+
+				return false;
+			}
+
 			// Runs once per frame for the duration of the scene
 			function update(time, delta) {
-				const speed = 100;
 				const prevVelocity = player.body.velocity.clone();
 				player.body.setVelocity(0);
 
 				// Horizontal movement
 				if (cursors.left.isDown) {
-					player.body.setVelocityX(-100);
+					player.body.setVelocityX(speed * -1);
 				} else if (cursors.right.isDown) {
-					player.body.setVelocityX(100);
+					player.body.setVelocityX(speed);
 				}
 
 				// Vertical movement
 				if (cursors.up.isDown) {
-					player.body.setVelocityY(-100);
+					player.body.setVelocityY(speed * -1);
 				} else if (cursors.down.isDown) {
-					player.body.setVelocityY(100);
+					player.body.setVelocityY(speed);
 				}
 
 				// Normalize and scale the velocity so that player can't move faster along a diagonal
@@ -232,6 +255,5 @@
 	</head>
 	<body>
 		<div id="game-container"></div>
-		<!-- <img src="./tilemap_packed.png" alt="tilemap" /> -->
 	</body>
 </html>
