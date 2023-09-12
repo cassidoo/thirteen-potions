@@ -1,6 +1,6 @@
-# Thirteen Potions
-
-![Thirteen Potions](promo400250.png)
+<p align="center">
+  <img src="promo400250.png" alt="Thirteen Potions">
+</p>
 
 You are a knight who has to collect the 13 potions in the castle as fast as possible. But be careful, there's 13 ghosts who want to slow you down!
 
