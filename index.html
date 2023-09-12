@@ -53,6 +53,7 @@
 			let controls;
 			let cursors;
 			let player;
+			let playerStartedMoving = false;
 			let speed = 100;
 
 			let PotionLayer;
@@ -64,6 +65,8 @@
 
 			let text;
 			let time;
+			let timerText;
+			let finalTime = -1;
 
 			// Runs once, loads up assets like images and audio
 			function preload() {
@@ -104,7 +107,7 @@
 				});
 
 				// Adding enemies
-				enemies = this.physics.add.staticGroup();
+				enemies = this.physics.add.group();
 				EnemyLayer.forEach((object) => {
 					let obj = enemies.create(object.x, object.y - 16, "enemy");
 					obj.setScale(object.width / 16, object.height / 16);
@@ -183,6 +186,28 @@
 					padding: { x: 2, y: 2 },
 				});
 				text.setScrollFactor(0);
+
+				// Timer Text
+				timerText = this.add.text(270, 287, "Time: 0", {
+					font: "9px",
+					fill: "#ffffff",
+					backgroundColor: "#3B2731",
+					padding: { x: 2, y: 2 },
+				});
+				timerText.setScrollFactor(0);
+
+				this.time.addEvent({
+					delay: 1000,
+					callback: function () {
+						if (playerStartedMoving && finalTime === -1) {
+							timerText.setText(
+								"Time: " + Math.ceil((this.time.now - this.startTime) / 1000)
+							);
+						}
+					},
+					callbackScope: this,
+					loop: true,
+				});
 			}
 
 			function collectPotion(player, potion) {
@@ -209,6 +234,28 @@
 			function update(time, delta) {
 				const prevVelocity = player.body.velocity.clone();
 				player.body.setVelocity(0);
+
+				if (potionScore === 13 && finalTime === -1) {
+					finalTime = Math.ceil((this.time.now - this.startTime) / 1000);
+					timerText.setText(`Final Time: ${finalTime} seconds!`);
+				}
+
+				if (
+					!playerStartedMoving &&
+					prevVelocity.x !== 0 &&
+					prevVelocity.y !== 0
+				) {
+					playerStartedMoving = true;
+					this.startTime = this.time.now;
+				}
+
+				// Move the enemy around randomly each update
+				enemies.children.iterate(function (enemy) {
+					enemy.body.setVelocity(
+						Phaser.Math.Between(-16, 16),
+						Phaser.Math.Between(-16, 16)
+					);
+				});
 
 				// Horizontal movement
 				if (cursors.left.isDown) {
