@@ -1,8 +1,12 @@
-<p align="center">
-  <img src="og.png" alt="Thirteen Potions">
-</p>
+<a href="https://thirteen-potions.netlify.app/">
+  <p align="center">
+    <img src="og.png" alt="Thirteen Potions">
+  </p>
+</a>
 
 You are a knight who has to collect the 13 potions in the castle as fast as possible. But be careful, there's 13 ghosts who want to slow you down!
+
+**[Play now!](https://thirteen-potions.netlify.app/)**
 
 (my current fastest time is 52 seconds, lmk if you beat me)
 
