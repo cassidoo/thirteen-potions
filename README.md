@@ -8,6 +8,8 @@ You are a knight who has to collect the 13 potions in the castle as fast as poss
 
 **[Play now!](https://thirteen-potions.netlify.app/)**
 
+You can also [play and comment on the game on itch.io](https://cassidoo.itch.io/thirteen-potions)!
+
 (my current fastest time is 52 seconds, lmk if you beat me)
 
 ## Why
